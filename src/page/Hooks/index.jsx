@@ -2,14 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 let state = [],
-    index = 0,
-    isRender = true;
-const defer = (fn) => {
-    return Promise.resolve().then(() => {
-        isRender = true;
-        fn();
-    });
-};
+    index = 0;
+const defer = (fn) =>  Promise.resolve().then(fn);
+
 function useState(initialValue) {
     // 保存当前的索引;
     let currentIndex = index;
@@ -26,11 +21,10 @@ function useState(initialValue) {
             newValue = newValue(state[currentIndex]);
         }
         state[currentIndex] = newValue;
-        if (isRender) {
+        if (index!==0) {
             defer(renderComponent);
         }
         index = 0;
-        isRender = false;
     };
     index += 1;
     return [state[currentIndex], setState];
